@@ -38,13 +38,11 @@ navToggle.addEventListener("click", (event) => {
 
 // ************************** Form functionality ************************
 
+// TODO Reading Status should is checkbox, to improve the user experience make reading status a tag like "Not Started yet", "Currenctly Reading", "Finished Reading" and according to this status you can show some text, appreciate them, give them motivation to Read.
+
 // TODO Add Books by fetching the data from an API, show only selected one
 
 // TODO More Info about the book such as the Price, reviews, ratings, downloads, sold data.
-
-// TODO The book added to the library and local storage but does not remove on clicking the remove button, so Fix that.
-
-// TODO The Read Status is just not working
 
 // TODO Add the favorite book heart icon functionality to all books
 
@@ -187,6 +185,11 @@ function addSuggestionBookToLibrary(e) {
     myLibrary.push(book);
     displayBooks(book);
     addBookToLocalStorage(book);
+
+    // Popup message showing user that book has been added to reading list
+    alert(
+        "Congrats 🎉, Your book has been added to the Reading list, Do check out 👍"
+    );
 }
 
 // function to remove the book from the array and from the page.
@@ -230,6 +233,11 @@ function removeBookFromLocalStorage(name) {
 submitBtn.addEventListener("click", (e) => {
     e.preventDefault(); // prevent actual submit
     addBookToLibrary(); // adding book to the list and to the page also.
+
+    // Popup message showing user that book has been added to reading list
+    alert(
+        "Congrats 🎉, Your book has been added to the Reading list, Do check out 👍"
+    );
     clearFields(); // clearing the fields once the form is filled.
 });
 
@@ -240,6 +248,9 @@ document.addEventListener("DOMContentLoaded", showBooks);
 readingList.addEventListener("click", (event) => {
     // remove a book from the page and list
     removeBook(event.target);
+
+    // Popup message showing user that book has been removed from reading list
+    alert("Your book has been removed from reading list");
 
     console.log(event.target.parentElement.children[0].textContent);
     // remove the book from the local storage
