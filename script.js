@@ -32,8 +32,7 @@ const navToggle = document.querySelector(".menu-icon");
 const navLinksCtn = document.querySelector(".nav-links-ctn");
 const navBar = document.querySelector("nav");
 
-navToggle.addEventListener("click", (e) => {
-    console.log("working...");
+navToggle.addEventListener("click", (event) => {
     navBar.classList.toggle("show-nav");
 });
 
@@ -122,7 +121,6 @@ function addBookToLibrary() {
     } else {
         let book = new Book(name, author, pages, status);
         myLibrary.push(book);
-        console.log(myLibrary);
 
         // add book to the page.
         displayBooks(book);
@@ -141,12 +139,11 @@ function showBooks() {
 
 // Function to show the added book to the array on the page.
 function displayBooks(book, index = myLibrary.length - 1) {
-    // Also improve on this, Creating many elements, adding class to them, then properly appending them to the DOM using the Javascript, Instead of all this many things, create one HTML markup of all this and dynamically add specific info like classNames and then append it to the DOM.
-
     const demoBook = document.createElement("div");
-
     demoBook.dataset.index = index;
     demoBook.classList.add("demo-book");
+
+    const readStatus = book.read ? "checked" : "unchecked";
 
     const bookContent = `
         <h3 class="book-title">${book.name}</h3>
@@ -157,65 +154,16 @@ function displayBooks(book, index = myLibrary.length - 1) {
         <div class="read-status-ctn">
             <span>Read</span>
             <label class="switch">
-                <input type="checkbox" name="read status" />
+                <input type="checkbox" name="read status" ${readStatus} />
                 <span class="slider round"></span>
             </label>
         </div>
-        <button class="primary-btn remove-btn">Remove from list</button>
+        <button class="primary-btn remove-btn">
+            Remove from list
+        </button>
     `;
-
     demoBook.innerHTML = bookContent;
     readingList.appendChild(demoBook);
-
-    // const bookTitle = document.createElement('h3');
-    // const authorAndPageCtn = document.createElement('div');
-    // const authorName = document.createElement('p');
-    // const pagesNumber = document.createElement('p');
-    // const readStatusCtn = document.createElement('div');
-    // const readStatusText = document.createElement('span');
-    // const label = document.createElement('label');
-    // const input = document.createElement('input');
-    // const slider = document.createElement('span');
-    // const button = document.createElement('button');
-
-    // bookTitle.textContent = `${book.name}`;
-    // authorName.textContent = `${book.author}`;
-    // pagesNumber.textContent = `${book.pages}`;
-    // readStatusText.textContent = "Read";
-    // button.textContent = "Remove from list";
-
-    // demoBook.dataset.index = index;
-    // demoBook.classList.add('demo-book');
-
-    // bookTitle.classList.add('book-title');
-    // authorAndPageCtn.classList.add('author_and_page-ctn');
-    // authorName.classList.add('author-name');
-    // pagesNumber.classList.add('pages-number');
-    // readStatusCtn.classList.add('read-status-ctn');
-    // label.classList.add('switch');
-    // // label.setAttribute('for', 'read-status');
-    // // input.setAttribute('id', 'read-status');
-    // input.setAttribute('type', 'checkbox');
-    // input.setAttribute('name', 'read status');
-    // slider.classList.add('slider')
-    // slider.classList.add('round')
-    // button.classList.add('primary-btn');
-    // button.classList.add('remove-btn');
-
-    // readingList.appendChild(demoBook);
-    // demoBook.appendChild(bookTitle);
-
-    // demoBook.appendChild(authorAndPageCtn);
-    // authorAndPageCtn.appendChild(authorName);
-    // authorAndPageCtn.appendChild(pagesNumber);
-    // demoBook.appendChild(readStatusCtn);
-    // readStatusCtn.appendChild(readStatusText);
-    // readStatusCtn.appendChild(label);
-    // label.appendChild(input);
-    // label.appendChild(slider);
-    // demoBook.appendChild(button);
-
-    console.log(demoBook);
 }
 
 // Function to clear fields
@@ -228,16 +176,14 @@ function clearFields() {
 // Function to add suggested book to reading list
 function addSuggestionBookToLibrary(e) {
     const name = e.target.parentElement.firstElementChild.textContent;
-    console.log(
-        e.target.parentElement.firstElementChild.nextElementSibling.lastElementChild
-    );
     const author =
         e.target.parentElement.firstElementChild.nextElementSibling
         .firstElementChild.textContent;
     const pages =
         e.target.parentElement.firstElementChild.nextElementSibling.lastElementChild
         .textContent;
-    const book = new Book(name, author, pages);
+    const readStatus = false;
+    const book = new Book(name, author, pages, readStatus);
     myLibrary.push(book);
     displayBooks(book);
     addBookToLocalStorage(book);
@@ -250,7 +196,7 @@ function removeBook(el) {
         const arrIndex = parseInt(el.parentElement.dataset.index); // removing from the list.
         myLibrary.splice(arrIndex, 1);
     }
-    console.log(el.parentElement.firstChild.textContent);
+    console.log(el.parentElement);
 }
 
 // Handle Storage
@@ -291,12 +237,15 @@ submitBtn.addEventListener("click", (e) => {
 document.addEventListener("DOMContentLoaded", showBooks);
 
 // Event: remove the book from the list
-readingList.addEventListener("click", (e) => {
+readingList.addEventListener("click", (event) => {
     // remove a book from the page and list
-    removeBook(e.target);
+    removeBook(event.target);
 
+    console.log(event.target.parentElement.children[0].textContent);
     // remove the book from the local storage
-    removeBookFromLocalStorage(e.target.parentElement.firstChild.textContent);
+    removeBookFromLocalStorage(
+        event.target.parentElement.children[0].textContent
+    );
 });
 
 // Event: add the suggested book to the reading list
